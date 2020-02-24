@@ -47,7 +47,7 @@ def load_movies():
         split_row = row.split("|")
         movie_id = split_row[0]
         full_title = split_row[1]
-        title = full_title[:-6]
+        title = full_title[:-7]
 
         release_date_str = split_row[2]
         fmat = "%d-%b-%Y"

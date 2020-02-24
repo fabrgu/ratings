@@ -52,9 +52,15 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     score = db.Column(db.Integer, nullable=False)
 
-
+    # Define relationship to user
+    user = db.relationship("User",
+                           backref="ratings", order_by=rating_id)
+    # define relationship to movie
+    movie = db.relationship("Movie",
+                            backref="ratings", order_by=rating_id)
 ##############################################################################
 # Helper functions
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
