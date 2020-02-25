@@ -35,8 +35,8 @@ def user_list():
 
 
 @app.route('/registration', methods=['POST', 'GET'])
-def show_registration():
-    """Show user registration form to log in"""
+def registration():
+    """Show user registration form or create user if email not in use."""
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -45,9 +45,48 @@ def show_registration():
             user = User(email=email, password=request.form.get('password'))
             db.session.add(user)
             db.session.commit()
-            return redirect('/')
+            flash('User successfully created')
+        else:
+            flash('User not created. Email associated with another user.')
+        return redirect('/')
 
     return render_template('registration.html')
+
+
+@app.route('/show_login')
+def show_login():
+    """Show login form."""
+
+    return render_template('login_form.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    """Logs in existing user."""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    existing_user = User.query.filter(User.email == email,
+                                      User.password == password).all()
+    if len(existing_user) > 0:
+        session['user_id'] = existing_user[0].user_id
+        flash('Logged in')
+        return redirect('/')
+    else:
+        flash('User does not exist. Please create an account.')
+        return redirect('/registration')
+
+
+@app.route('/logout')
+def logout():
+    """ log user out of session"""
+
+    flash('You are logged out.')
+
+    if session.get('user_id'):
+        del session['user_id']
+    return redirect('/')
 
 
 if __name__ == "__main__":
