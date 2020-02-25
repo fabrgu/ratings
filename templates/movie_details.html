@@ -12,7 +12,12 @@
 
 {% if session.get('user_id', False)%}
   <form action="/add_rating/{{ movie.movie_id}}" method="POST">
-    Give this Movie a Score:
+    {# This only shows if user is logged in #}
+    {% if rating %}
+      Update Movie's Score:
+    {% else %}
+      Give this Movie a Score:
+    {% endif %}
     <select name="score">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -20,6 +25,7 @@
       <option value="4">4</option>
       <option value="5">5</option>
     </select>
+    <input type='submit'>
   </form>
 
 {% endif %}
