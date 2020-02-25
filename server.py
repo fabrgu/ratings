@@ -97,12 +97,33 @@ def user_details(user_id):
     return render_template("user_details.html", user=user)
 
 
-@app.route('')
+@app.route('/movies')
 def movie_list():
-    """Show details about movie."""
-    # make movie list
-    pass
+    """Show movie list."""
 
+    movies = Movie.query.order_by("title").all()
+
+    return render_template('movie_list.html', movies=movies)
+
+
+@app.route('/movies/<int:movie_id>')
+def movie_details(movie_id):
+    """ Show details about movie."""
+
+    movie = Movie.query.get(movie_id)
+
+    return render_template("movie_details.html", movie=movie)
+
+
+@app.route('/add_rating/<int:movie_id>', methods=['POST'])
+def update_rating(movie_id):
+    """ Add new rating, or update existing rating for existing users """
+    
+    user_id = session['user_id']
+    score = request.form.get('score')
+
+    rating = Rating.query.filter_by(user_id=user_id, movie_id=movie_id)
+    # finish this
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
