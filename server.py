@@ -89,6 +89,21 @@ def logout():
     return redirect('/')
 
 
+@app.route('/users/<int:user_id>')
+def user_details(user_id):
+    """Show user details page"""
+    user = User.query.get(user_id)
+
+    return render_template("user_details.html", user=user)
+
+
+@app.route('')
+def movie_list():
+    """Show details about movie."""
+    # make movie list
+    pass
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
